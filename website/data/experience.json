@@ -1,0 +1,26 @@
+[
+    {
+        "role": "Node.JS Developer",
+        "company": "Codetain",
+        "summary": "",
+        "range": "January 2022 - Present"
+    },
+    {
+        "role": ".NET Developer",
+        "company": "Metapack",
+        "summary": "Maintaining and expanding functionality based on documentation, Maintaining Unit and E2E tests, fixing production incidents",
+        "range": "Feburary 2021 - December 2021"
+    },
+    {
+        "role": "Summer Academy Student",
+        "company": "Metapack",
+        "summary": "Database design and administration, Desktop App and WebAPI best practices, Testing (unit, functional, e2e), Documentation",
+        "range": "September 2020"
+    },
+    {
+        "role": "Intern .NET Developer",
+        "company": "Cinkciarz.pl",
+        "summary": "Maintaining unit tests, bug fixing, extending internal API functionality",
+        "range": "July 2019 - September 2019"
+    }
+]
