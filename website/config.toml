@@ -22,6 +22,12 @@ showPublications = true
 showQr = true
 showSkills = true
 
+
+[params.google]
+
+[params.google.analytics]
+trackerID = 'G-4F06MYM031'
+
 [[params.handles]]
 link = "https://www.linkedin.com/in/wiktor-kowalski/"
 name = "LinkedIn"
