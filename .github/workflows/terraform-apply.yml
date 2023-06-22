@@ -11,7 +11,7 @@ env:
   TF_CLOUD_ORGANIZATION: "wiktor9196667"
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
   TF_WORKSPACE: "website"
-  CONFIG_DIRECTORY: "./infra"
+  CONFIG_DIRECTORY: "./"
 
 jobs:
   terraform:
