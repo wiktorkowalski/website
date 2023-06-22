@@ -25,7 +25,7 @@ variable "aws_secret_key" {
   default = ""
 }
 
-variable "github_access_token" {
+variable "gh_access_token" {
   type = string
   default = ""
 }
