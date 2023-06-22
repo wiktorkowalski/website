@@ -33,7 +33,7 @@ variable "github_access_token" {
 // aws
 provider "aws" {
   region  = "eu-central-1"
-  
+
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key
 }
@@ -47,7 +47,7 @@ data "aws_route53_zone" "wiktorkowalski" {
 resource "aws_amplify_app" "website" {
   name         = "website"
   repository   = "https://github.com/wiktorkowalski/website"
-  access_token = var.github_access_token
+  access_token = var.gh_access_token
 
   build_spec = file("build_spec.yml")
 }
