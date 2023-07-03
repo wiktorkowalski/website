@@ -5,13 +5,15 @@ import { getCollection } from "astro:content";
 import fetch from "node-fetch";
 import { BlogPost } from "../types";
 
-export const getPosts = async () => {
-  const res = await fetch("http://localhost:3001/posts.json");
+const url = "https://blog.wiktorkowalski.pl/";
+
+export const getPosts = async (url: string) => {
+  const res = await fetch(url + "posts.json");
   const posts = await res.json();
 
   return posts as BlogPost[];
 };
-const posts = (await getPosts()).sort(
+const posts = (await getPosts(url)).sort(
   (a, b) => b.pubDate.valueOf() - a.pubDate.valueOf()
 );
 ---
@@ -85,7 +87,7 @@ const posts = (await getPosts()).sort(
           <HorizontalCard
             title={post.title}
             desc={post.description}
-            url={"https://blog.wiktorkowalski.pl/" + post.link}
+            url={url + post.link}
             target="_blank"
           />
           <div class="divider my-0" />
