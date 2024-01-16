@@ -1,4 +1,4 @@
-name: 'Terraform'
+name: 'Build and Publish'
 
 on:
   push:
@@ -53,3 +53,49 @@ jobs:
       id: website
       run: echo "::set-output name=url::$(terraform output -raw website_url)"
       working-directory: ./infra
+
+    outputs:
+      bucket_url: ${{ steps.bucket.outputs.url }}
+      website_url: ${{ steps.website.outputs.url }}
+
+  build:
+    needs: terraform
+    name: 'Build'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 21
+
+    - name: Install Dependencies
+      run: npm ci
+
+    - name: Build
+      run: npm run build
+
+  publish:
+    needs: [terraform, build]
+    name: 'Publish'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+        aws-region: eu-west-1
+
+    - name: Sync to S3
+      run: aws s3 sync ./dist/ ${{ needs.terraform.outputs.bucket_url }}
+
+    - name: Echo URL
+      run: echo ${{ needs.terraform.outputs.website_url }}
