@@ -23,7 +23,7 @@ jobs:
         aws-region: eu-west-1
 
     - name: Sync to S3
-      run: aws s3 sync ./dist/ ${{ steps.terraform.outputs.bucket_url }}
+      run: aws s3 sync ./dist/ ${{ steps.bucket.outputs.url }}
 
     - name: Echo URL
       run: echo ${{ steps.website.outputs.url }}
