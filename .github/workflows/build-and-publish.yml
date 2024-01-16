@@ -98,6 +98,9 @@ jobs:
       with:
         name: dist
         path: dist
+    
+    - name: pwd
+      run: pwd
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
