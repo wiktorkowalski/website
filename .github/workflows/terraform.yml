@@ -29,21 +29,27 @@ jobs:
 
     - name: Terraform Init
       run: terraform init
+      working-directory: ./infra
 
     - name: Terraform Validate
       run: terraform validate
+      working-directory: ./infra
 
     - name: Terraform Plan
       run: terraform plan
+      working-directory: ./infra
       continue-on-error: false
 
     - name: Terraform Apply
       run: terraform apply -auto-approve
+      working-directory: ./infra
 
     - name: Set Bucket URL
       id: bucket
       run: echo "::set-output name=url::$(terraform output -raw bucket_url)"
+      working-directory: ./infra
 
     - name: Set Website URL
       id: website
       run: echo "::set-output name=url::$(terraform output -raw website_url)"
+      working-directory: ./infra
