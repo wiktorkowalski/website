@@ -102,15 +102,21 @@ jobs:
     - name: pwd
       run: pwd
 
+    - name: ls
+      run: ls
+
+    - name: ls dist
+      run: ls dist
+
     - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
+      uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
         aws-region: eu-west-1
 
     - name: Sync to S3
-      run: aws s3 sync ./dist/ ${{ needs.terraform.outputs.bucket_url }}
+      run: aws s3 sync ./website/dist/ ${{ needs.terraform.outputs.bucket_url }}
 
     - name: Echo URL
       run: echo ${{ needs.terraform.outputs.website_url }}
