@@ -10,6 +10,9 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
+    outputs:
+      bucket_url: ${{ steps.bucket.outputs.BUCKET_URL }}
+      website_url: ${{ steps.website.outputs.WEBSITE_URL }}
 
     steps:
     - name: Checkout
@@ -46,17 +49,13 @@ jobs:
 
     - name: Set Bucket URL
       id: bucket
-      run: echo "BUCKET_URL=$(terraform output -raw bucket_url)" >> $GITHUB_ENV
+      run: echo "BUCKET_URL=$(terraform output -raw bucket_url)" >> "$GITHUB_OUTPUT"
       working-directory: ./infra
 
     - name: Set Website URL
       id: website
-      run: echo "WEBSITE_URL=$(terraform output -raw website_url)" >> $GITHUB_ENV
+      run: echo "WEBSITE_URL=$(terraform output -raw website_url)" >> "$GITHUB_OUTPUT"
       working-directory: ./infra
-
-    outputs:
-      bucket_url: ${{ steps.bucket.outputs.url }}
-      website_url: ${{ steps.website.outputs.url }}
 
   build:
     needs: terraform
@@ -116,7 +115,11 @@ jobs:
         aws-region: eu-west-1
 
     - name: Sync to S3
-      run: aws s3 sync ./website/dist/ ${{ needs.terraform.outputs.bucket_url }}
+      env:
+        AWS_S3_BUCKET: ${{ needs.terraform.outputs.bucket_url }}
+      run: aws s3 sync dist/ $AWS_S3_BUCKET
 
     - name: Echo URL
-      run: echo ${{ needs.terraform.outputs.website_url }}
+      env:
+        WEBSITE_URL: ${{ needs.terraform.outputs.website_url }}
+      run: echo $WEBSITE_URL
