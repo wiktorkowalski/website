@@ -117,9 +117,9 @@ jobs:
     - name: Sync to S3
       env:
         AWS_S3_BUCKET: ${{ needs.terraform.outputs.bucket_url }}
-      run: aws s3 sync dist/ $AWS_S3_BUCKET
+      run: aws s3 sync dist/ $AWS_S3_BUCKET --delete
 
     - name: Echo URL
       env:
         WEBSITE_URL: ${{ needs.terraform.outputs.website_url }}
-      run: echo $WEBSITE_URL
+      run: echo "$WEBSITE_URL" >> "$GITHUB_STEP_SUMMARY"
