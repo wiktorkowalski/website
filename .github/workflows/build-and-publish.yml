@@ -13,6 +13,7 @@ jobs:
     outputs:
       bucket_url: ${{ steps.bucket.outputs.BUCKET_URL }}
       website_url: ${{ steps.website.outputs.WEBSITE_URL }}
+      cloudfront_distribution_id: ${{ steps.cloudfront.outputs.AWS_CLOUDFRONT_DISTRIBUTION_ID }}
 
     steps:
     - name: Checkout
@@ -57,6 +58,11 @@ jobs:
       run: echo "WEBSITE_URL=$(terraform output -raw website_url)" >> "$GITHUB_OUTPUT"
       working-directory: ./infra
 
+    - name: Set CloudFront Distribution ID
+      id: cloudfront
+      run: echo "AWS_CLOUDFRONT_DISTRIBUTION_ID=$(terraform output -raw cloudfront_distribution_id)" >> "$GITHUB_ENV"
+      working-directory: ./infra
+
   build:
     needs: terraform
     name: 'Build'
@@ -97,15 +103,6 @@ jobs:
       with:
         name: dist
         path: dist
-    
-    - name: pwd
-      run: pwd
-
-    - name: ls
-      run: ls
-
-    - name: ls dist
-      run: ls dist
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
@@ -118,6 +115,11 @@ jobs:
       env:
         AWS_S3_BUCKET: ${{ needs.terraform.outputs.bucket_url }}
       run: aws s3 sync dist/ $AWS_S3_BUCKET --delete
+
+    - name: Invalidate CloudFront
+      env:
+        AWS_CLOUDFRONT_DISTRIBUTION_ID: ${{ needs.terraform.outputs.cloudfront_distribution_id }}
+      run: aws cloudfront create-invalidation --distribution-id $AWS_CLOUDFRONT_DISTRIBUTION_ID --paths "/*" "/"
 
     - name: Echo URL
       env:
