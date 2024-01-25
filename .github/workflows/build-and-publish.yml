@@ -13,7 +13,7 @@ jobs:
     outputs:
       bucket_url: ${{ steps.bucket.outputs.BUCKET_URL }}
       website_url: ${{ steps.website.outputs.WEBSITE_URL }}
-      cloudfront_distribution_id: ${{ steps.cloudfront.outputs.AWS_CLOUDFRONT_DISTRIBUTION_ID }}
+      cloudfront_distribution_id: ${{ steps.cloudfront.outputs.CLOUDFRONT_DISTRIBUTION_ID }}
 
     steps:
     - name: Checkout
@@ -60,7 +60,7 @@ jobs:
 
     - name: Set CloudFront Distribution ID
       id: cloudfront
-      run: echo "AWS_CLOUDFRONT_DISTRIBUTION_ID=$(terraform output -raw cloudfront_distribution_id)" >> "$GITHUB_ENV"
+      run: echo "CLOUDFRONT_DISTRIBUTION_ID=$(terraform output -raw cloudfront_distribution_id)" >> "$GITHUB_OUTPUT"
       working-directory: ./infra
 
   build:
@@ -118,8 +118,8 @@ jobs:
 
     - name: Invalidate CloudFront
       env:
-        AWS_CLOUDFRONT_DISTRIBUTION_ID: ${{ needs.terraform.outputs.cloudfront_distribution_id }}
-      run: aws cloudfront create-invalidation --distribution-id $AWS_CLOUDFRONT_DISTRIBUTION_ID --paths "/*" "/"
+        CLOUDFRONT_DISTRIBUTION_ID: ${{ needs.terraform.outputs.cloudfront_distribution_id }}
+      run: aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*" "/"
 
     - name: Echo URL
       env:
