@@ -10,7 +10,7 @@ terraform {
   required_providers {
     aws = {
       source = "hashicorp/aws"
-      version = "5.32.1"
+      version = "5.33.0"
     }
   }
 }
@@ -105,23 +105,29 @@ resource "aws_cloudfront_origin_access_identity" "oai" {
 
 resource "aws_cloudfront_distribution" "website_distribution" {
   origin {
-    domain_name = aws_s3_bucket.website_bucket.bucket_regional_domain_name
-    origin_id   = aws_s3_bucket.website_bucket.bucket_regional_domain_name
+    domain_name = "wiktorkowalski-website.s3-website-eu-west-1.amazonaws.com" // aws_s3_bucket.website_bucket.website_endpoint is apparently deprecated
+    origin_id   = "wiktorkowalski-website"
 
-    s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.oai.cloudfront_access_identity_path
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "http-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+      origin_keepalive_timeout = 5
+      origin_read_timeout = 30
     }
   }
 
   enabled             = true
   default_root_object = "index.html"
+  comment = "website"
 
   aliases = [ "wiktorkowalski.pl", "www.wiktorkowalski.pl" ]
 
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = aws_s3_bucket.website_bucket.bucket_regional_domain_name
+    target_origin_id = "wiktorkowalski-website"
 
     forwarded_values {
       query_string = false
@@ -212,4 +218,8 @@ output "bucket_url" {
 
 output "website_url" {
   value = "https://${tolist(aws_cloudfront_distribution.website_distribution.aliases)[0]}"
+}
+
+output "cloudfront_distribution_id" {
+  value = aws_cloudfront_distribution.website_distribution.id
 }
