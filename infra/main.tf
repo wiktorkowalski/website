@@ -42,7 +42,7 @@ resource "aws_s3_bucket_website_configuration" "website" {
   }
 
   error_document {
-    key = "index.html"
+    key = "404.html"
   }
 }
 
@@ -111,13 +111,6 @@ resource "aws_cloudfront_distribution" "website_distribution" {
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.oai.cloudfront_access_identity_path
     }
-  }
-
-  custom_error_response {
-    error_caching_min_ttl = 0
-    error_code = 403
-    response_code = 200
-    response_page_path = "/index.html"
   }
 
   enabled             = true
