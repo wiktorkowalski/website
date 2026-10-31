@@ -1,0 +1,142 @@
+---
+import Device from "./Device.astro";
+const P = `wiktor@rack-01`;
+---
+
+<Device id="whoami" labelledby="whoami-h" class="kvm">
+  <div class="screen">
+    <div>
+      <span class="u">{P}</span>
+      <span class="m">:~$</span> whoami
+    </div>
+    <h1 id="whoami-h">Wiktor Kowalski</h1>
+    <div>
+      <span class="u">{P}</span>
+      <span class="m">:~$</span> cat role
+    </div>
+    <p>Software engineer · .NET &amp; Node.js · AWS</p>
+    <div>
+      <span class="u">{P}</span>
+      <span class="m">:~$</span> cat about.md
+    </div>
+    <div class="about">
+      <slot />
+    </div>
+    <div>
+      <span class="u">{P}</span>
+      <span class="m">:~$</span> <span class="cursor" aria-hidden="true"></span>
+    </div>
+  </div>
+  <div class="side" aria-hidden="true">
+    <span class="tag-dev">KVM-01 · CONSOLE</span>
+    <span class="keys">
+      <span class="on">1</span>
+      <span>2</span>
+      <span>3</span>
+      <span>4</span>
+    </span>
+    <span class="ind row">
+      <span>
+        <i class="dot"></i>PWR
+      </span>
+      <span>
+        <i class="dot amber"></i>ACT
+      </span>
+    </span>
+    <span class="grill"></span>
+  </div>
+</Device>
+
+<style>
+  :global(.body.kvm) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .screen {
+    flex: 999 1 460px;
+    min-width: 0;
+    background: #06100a;
+    border: 4px solid #0d0f11;
+    border-radius: 6px;
+    box-shadow:
+      inset 0 0 30px rgba(0, 0, 0, 0.9),
+      0 1px 0 rgba(255, 255, 255, 0.06);
+    padding: 18px 20px;
+    font: 14px/1.7 var(--mono);
+    color: #b8f0cc;
+  }
+  .u {
+    color: var(--led);
+  }
+  .m {
+    color: var(--muted);
+  }
+  h1 {
+    margin: 2px 0 10px;
+    font: 700 30px/1.2 var(--mono);
+    color: #effff4;
+  }
+  p,
+  .about :global(p) {
+    margin: 0 0 10px;
+    max-width: 60ch;
+  }
+  .about :global(a) {
+    color: #b8f0cc;
+  }
+  .cursor {
+    display: inline-block;
+    width: 9px;
+    height: 17px;
+    background: #b8f0cc;
+    vertical-align: -3px;
+  }
+  .side {
+    flex: 1 1 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .keys {
+    display: flex;
+    gap: 6px;
+  }
+  .keys span {
+    width: 30px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, #3a4047, #23272c);
+    border: 1px solid #0a0c0e;
+    border-radius: 2px;
+    font: 11px/1 var(--mono);
+    color: var(--muted);
+  }
+  .keys .on {
+    color: var(--text);
+    box-shadow: 0 0 0 1px var(--led);
+  }
+  .ind.row {
+    flex-direction: row;
+    gap: 14px;
+    font-size: 11px;
+  }
+  .ind .dot {
+    width: 7px;
+    height: 7px;
+  }
+  .grill {
+    height: 40px;
+    border-radius: 2px;
+    background-image: repeating-linear-gradient(90deg, #0b0d0f 0 3px, transparent 3px 7px);
+    opacity: 0.9;
+  }
+  @media (max-width: 640px) {
+    h1 {
+      font-size: 24px;
+    }
+  }
+</style>
