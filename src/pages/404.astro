@@ -1,12 +1,16 @@
 ---
 import Base from "../layouts/Base.astro";
-import Unit from "../components/Unit.astro";
+import Device from "../components/rack/Device.astro";
 ---
 
 <Base title="404">
-  <Unit label="ERR-404" title="No device in this slot">
+  <Device labelledby="e404" class="e404">
+    <span class="tag-dev">ERR-404</span>
+    <h1 id="e404" class="h-dev">
+      No device in this slot
+    </h1>
     <p>
       Nothing is mounted here. <a href="/">Back to the rack</a>.
     </p>
-  </Unit>
+  </Device>
 </Base>

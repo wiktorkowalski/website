@@ -1,10 +1,13 @@
 ---
 import "@fontsource/jetbrains-mono/400.css";
+import "@fontsource/jetbrains-mono/600.css";
 import "@fontsource/jetbrains-mono/700.css";
 import "@fontsource/ibm-plex-sans/400.css";
 import "@fontsource/ibm-plex-sans/600.css";
 import "../styles/global.css";
-import { NAV, SITE, SOCIALS } from "../consts";
+import "../styles/rack.css";
+import PatchPanel from "../components/rack/PatchPanel.astro";
+import { SITE } from "../consts";
 
 interface Props {
   title?: string;
@@ -35,85 +38,48 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <a class="skip" href="#main">
       Skip to content
     </a>
-    <div class="wrap rack">
-      <header class="unit panel">
-        <a href="/" class="brand">
-          <span class="led" aria-hidden="true"></span>
-          <span class="name">{SITE.title}</span>
-        </a>
-        <nav aria-label="Sections">
-          <ul>
-            {NAV.map((item, i) => (
-              <li>
-                <a href={item.href}>
-                  <span class="label">{String(i + 1).padStart(2, "0")}</span>
-                  <span>{item.label}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </header>
-      <main id="main">
-        <slot />
-      </main>
-      <footer class="unit foot">
-        <span class="label">PDU-01</span>
-        <ul>
-          {SOCIALS.map((s) => (
-            <li>
-              <a href={s.href}>{s.label}</a>
-            </li>
-          ))}
-        </ul>
-        <span class="label">
-          © {new Date().getFullYear()} {SITE.author}
-        </span>
-      </footer>
+    <div id="top" class="page">
+      <div class="rack">
+        <div class="cab-top">
+          <span>RACK-01 · WIKTORKOWALSKI.PL</span>
+          <span class="online">
+            <span class="dot" aria-hidden="true"></span>42U · ONLINE
+          </span>
+        </div>
+        <div class="cabinet">
+          <div class="rail" aria-hidden="true"></div>
+          <div class="units">
+            <PatchPanel />
+            <main id="main" class="units-main">
+              <slot />
+            </main>
+          </div>
+          <div class="rail right" aria-hidden="true"></div>
+        </div>
+        <footer class="cab-base">
+          <span>
+            © {new Date().getFullYear()} {SITE.author}
+          </span>
+          <a href="#top">Back to U42 ↑</a>
+        </footer>
+      </div>
     </div>
   </body>
 </html>
 
 <style>
-  .rack {
-    max-width: 52rem;
-  }
-  .panel,
-  .foot {
+  .units-main {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem 1.5rem;
+    flex-direction: column;
+    gap: 3px;
   }
-  .panel {
-    margin: 1rem 0 1.25rem;
-  }
-  .foot {
-    margin: 2.5rem 0 1.5rem;
-  }
-  .brand {
+  .online {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    text-decoration: none;
-    color: var(--text);
-    font: 700 1rem/1 var(--mono);
+    gap: 8px;
   }
-  ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0 1rem;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  nav a,
-  .foot a {
-    display: inline-flex;
-    gap: 0.4rem;
-    align-items: center;
-    font: 0.875rem/2.75 var(--mono);
-    text-decoration: none;
+  .online .dot {
+    width: 7px;
+    height: 7px;
   }
 </style>

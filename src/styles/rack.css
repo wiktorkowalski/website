@@ -1,0 +1,207 @@
+/* Rack hardware shared by every device. Values from the Claude Design canvas. */
+:root {
+  --ink: #f1f3f5;
+  --soft: #c3c9cf;
+  --led-off: #2c3237;
+  --rail-w: 28px;
+  --hole-w: 9px;
+  --ear-w: 24px;
+  --unit-pad: 16px 6px;
+  --page-pad: 48px 24px 64px;
+}
+@media (max-width: 640px) {
+  :root {
+    --rail-w: 10px;
+    --hole-w: 4px;
+    --ear-w: 12px;
+    --unit-pad: 14px 4px;
+    --page-pad: 16px 8px 32px;
+  }
+  .full-only {
+    display: none !important;
+  }
+}
+
+.page {
+  padding: var(--page-pad);
+}
+.rack {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+.mono {
+  font-family: var(--mono);
+}
+
+.cab-top,
+.cab-base {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 16px;
+  border: 1px solid #23272c;
+  font: 600 12px/1.4 var(--mono);
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.cab-top {
+  background: linear-gradient(180deg, #1a1d21, #0f1113);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+}
+.cab-base {
+  padding: 10px 16px;
+  letter-spacing: 0;
+  background: linear-gradient(180deg, #0f1113, #1a1d21);
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+}
+.cab-base a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: none;
+}
+
+.cabinet {
+  display: flex;
+  background: #050607;
+  border: 1px solid #23272c;
+  border-top-color: #000;
+  padding: 8px 0;
+  box-shadow: 0 40px 90px rgba(0, 0, 0, 0.7);
+}
+.rail {
+  width: var(--rail-w);
+  flex: none;
+  background-color: #1b1f23;
+  background-image: repeating-linear-gradient(180deg, #050607 0 8px, transparent 8px 22px);
+  background-size: var(--hole-w) 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-right: 1px solid #0b0d0f;
+  box-shadow: inset -2px 0 4px #0008;
+}
+.rail.right {
+  border-right: none;
+  border-left: 1px solid #0b0d0f;
+  box-shadow: inset 2px 0 4px #0008;
+}
+.units {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 0 3px;
+}
+
+/* A device: ears with screws on both sides, body in the middle. */
+.dev {
+  display: flex;
+  align-items: stretch;
+  background-color: #1f2328;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 3px),
+    linear-gradient(180deg, #30363c 0%, #24292e 6%, #1d2125 94%, #141719 100%);
+  border: 1px solid #0a0c0e;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  scroll-margin-top: 1rem;
+}
+.dev.dark {
+  background: linear-gradient(180deg, #24282d 0%, #1a1d21 8%, #15181b 92%, #0e1012 100%);
+  border-color: #000;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.ear {
+  width: var(--ear-w);
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+}
+.ear.one {
+  justify-content: center;
+  padding: 0;
+}
+.screw {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #8a929b, #3a4047 60%, #1d2125);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6);
+}
+.body {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: var(--unit-pad);
+}
+
+.h-dev {
+  margin: 0;
+  font: 700 13px/1.4 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.tag-dev {
+  font: 700 11px/1.4 var(--mono);
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--c, var(--led));
+  box-shadow: 0 0 5px var(--c, var(--led));
+}
+.dot.off {
+  --c: var(--led-off);
+  box-shadow: none;
+}
+.dot.amber {
+  --c: var(--amber);
+}
+.ind {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font: 10px/1.2 var(--mono);
+  color: var(--muted);
+}
+.ind span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.blank {
+  height: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 6px;
+  background: linear-gradient(180deg, #2a2f34, #1a1d21);
+  border: 1px solid #0a0c0e;
+  border-radius: 3px;
+}
+.blank .vent {
+  flex: 1;
+  height: 8px;
+  background-image: repeating-linear-gradient(90deg, #0b0d0f 0 16px, transparent 16px 22px);
+  border-radius: 1px;
+}
+.blank .screw {
+  width: 8px;
+  height: 8px;
+  box-shadow: none;
+}
