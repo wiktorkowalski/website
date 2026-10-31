@@ -45,7 +45,7 @@ const cv = defineCollection({
   ]),
 });
 
-// Stack = switch ports. One yaml key = one group.
+// Stack = switch ports. One yaml key = one switch.
 const stack = defineCollection({
   loader: file("./src/data/stack.yaml"),
   schema: z.object({ items: z.array(z.string()) }),
