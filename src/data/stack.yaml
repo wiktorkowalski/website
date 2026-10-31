@@ -1,0 +1,11 @@
+# One key = one group of switch ports. DRAFT: trim or extend.
+languages:
+  items: [C#, TypeScript, JavaScript, SQL, Bash]
+backend:
+  items: [.NET, ASP.NET Core, Node.js, PostgreSQL]
+cloud:
+  items: [AWS, Lambda, Cloudflare, Kubernetes (EKS)]
+infra:
+  items: [Terraform, Docker, GitHub Actions]
+web:
+  items: [Astro]

@@ -1,0 +1,119 @@
+---
+import "@fontsource/jetbrains-mono/400.css";
+import "@fontsource/jetbrains-mono/700.css";
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/600.css";
+import "../styles/global.css";
+import { NAV, SITE, SOCIALS } from "../consts";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const { title, description = SITE.description } = Astro.props;
+const fullTitle = title ? `${title} | ${SITE.title}` : SITE.title;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title ?? SITE.title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="theme-color" content="#0c0e10" />
+  </head>
+  <body>
+    <a class="skip" href="#main">
+      Skip to content
+    </a>
+    <div class="wrap rack">
+      <header class="unit panel">
+        <a href="/" class="brand">
+          <span class="led" aria-hidden="true"></span>
+          <span class="name">{SITE.title}</span>
+        </a>
+        <nav aria-label="Sections">
+          <ul>
+            {NAV.map((item, i) => (
+              <li>
+                <a href={item.href}>
+                  <span class="label">{String(i + 1).padStart(2, "0")}</span>
+                  <span>{item.label}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </header>
+      <main id="main">
+        <slot />
+      </main>
+      <footer class="unit foot">
+        <span class="label">PDU-01</span>
+        <ul>
+          {SOCIALS.map((s) => (
+            <li>
+              <a href={s.href}>{s.label}</a>
+            </li>
+          ))}
+        </ul>
+        <span class="label">
+          © {new Date().getFullYear()} {SITE.author}
+        </span>
+      </footer>
+    </div>
+  </body>
+</html>
+
+<style>
+  .rack {
+    max-width: 52rem;
+  }
+  .panel,
+  .foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+  }
+  .panel {
+    margin: 1rem 0 1.25rem;
+  }
+  .foot {
+    margin: 2.5rem 0 1.5rem;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    color: var(--text);
+    font: 700 1rem/1 var(--mono);
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  nav a,
+  .foot a {
+    display: inline-flex;
+    gap: 0.4rem;
+    align-items: center;
+    font: 0.875rem/2.75 var(--mono);
+    text-decoration: none;
+  }
+</style>
