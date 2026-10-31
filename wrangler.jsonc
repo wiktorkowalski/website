@@ -9,6 +9,8 @@
     // www needs the redirect in worker.js, so the Worker runs before assets.
     "run_worker_first": true,
   },
+  // PR branches: `wrangler preview` needs this block.
+  "previews": {},
   // DNS records (AAAA 100::, proxied) live in cloudflare-terraform.
   "routes": [
     { "pattern": "wiktorkowalski.pl/*", "zone_name": "wiktorkowalski.pl" },
