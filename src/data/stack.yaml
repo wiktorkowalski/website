@@ -1,0 +1,3 @@
+# One key = one switch. Ports are lit in this order. DRAFT: trim or extend.
+sw-01:
+  items: [.NET, C#, Node.js, TypeScript, PostgreSQL, AWS, Terraform, Docker, Cloudflare, Astro]

@@ -1,0 +1,27 @@
+---
+// One rack device: screwed ears on both sides, content in the middle.
+interface Props {
+  as?: "section" | "nav" | "article" | "div";
+  id?: string;
+  labelledby?: string;
+  label?: string;
+  oneU?: boolean;
+  dark?: boolean;
+  class?: string;
+}
+const { as: Tag = "section", id, labelledby, label, oneU = false, dark = false, class: cls } = Astro.props;
+---
+
+<Tag id={id} aria-labelledby={labelledby} aria-label={label} class:list={["dev", { dark }]}>
+  <div class:list={["ear", { one: oneU }]} aria-hidden="true">
+    <span class="screw"></span>
+    {!oneU && <span class="screw" />}
+  </div>
+  <div class:list={["body", cls]}>
+    <slot />
+  </div>
+  <div class:list={["ear", { one: oneU }]} aria-hidden="true">
+    <span class="screw"></span>
+    {!oneU && <span class="screw" />}
+  </div>
+</Tag>

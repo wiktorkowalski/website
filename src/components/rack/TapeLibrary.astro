@@ -1,0 +1,184 @@
+---
+import { getCollection } from "astro:content";
+import Device from "./Device.astro";
+
+// CV as a log: running job = RUN (amber), past jobs = INFO, schools = EDU.
+const cv = (await getCollection("cv")).map((e) => e.data);
+const when = (e: { from: string; to?: string }) =>
+  !e.to ? `${e.from}–now` : e.to === e.from ? e.from : `${e.from}–${e.to}`;
+const log = cv
+  .flatMap((e) => {
+    if (e.kind === "job")
+      return [
+        {
+          from: e.from,
+          when: when(e),
+          lvl: e.to ? "INFO" : "RUN ",
+          run: !e.to,
+          what: `${e.role} @ ${e.company}`,
+          notes: e.notes,
+        },
+      ];
+    if (e.kind === "school")
+      return [
+        {
+          from: e.from,
+          when: when(e),
+          lvl: "EDU ",
+          run: false,
+          what: `${e.degree}, ${e.school}`,
+          notes: [] as string[],
+        },
+      ];
+    return [];
+  })
+  .sort((a, b) => b.from.localeCompare(a.from));
+const certs = cv.flatMap((e) => (e.kind === "cert" ? [e] : []));
+---
+
+<Device id="log" labelledby="log-h" class="tape">
+  <div class="head">
+    <h2 id="log-h" class="h-dev">
+      Experience
+    </h2>
+    <span class="tag-dev">LOG-01 · TAPE LIBRARY</span>
+  </div>
+  <div class="cols">
+    <ol class="log">
+      {log.map((l) => (
+        <li>
+          <span class="when">{l.when}</span>
+          <span class:list={["lvl", { run: l.run }]}>{l.lvl}</span>
+          <span class="what">
+            {l.what}
+            {l.notes.map((n) => (
+              <span class="note">{n}</span>
+            ))}
+          </span>
+        </li>
+      ))}
+    </ol>
+    <div class="certs">
+      <span class="tag-dev">CERTIFICATIONS</span>
+      <ul>
+        {certs.map((c) => (
+          <li>
+            <span class="spine" aria-hidden="true" />
+            <span class="name">{c.url ? <a href={c.url}>{c.name}</a> : c.name}</span>
+            {c.year && <span class="year">{c.year}</span>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</Device>
+
+<style>
+  :global(.body.tape) {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .cols {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .log {
+    flex: 999 1 460px;
+    min-width: 0;
+    margin: 0;
+    padding: 14px 16px;
+    list-style: none;
+    background: #08090b;
+    border: 3px solid #0d0f11;
+    border-radius: 4px;
+    box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.9);
+    font: 13px/1.6 var(--mono);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .log li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 14px;
+  }
+  .when {
+    color: var(--muted);
+    white-space: pre;
+  }
+  .lvl {
+    color: var(--led);
+    font-weight: 700;
+    white-space: pre;
+  }
+  .lvl.run {
+    color: var(--amber);
+  }
+  .what {
+    flex: 1 1 260px;
+    min-width: 0;
+    color: var(--text);
+  }
+  .note {
+    display: block;
+    color: var(--muted);
+  }
+  .certs {
+    flex: 1 1 220px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .certs ul {
+    margin: 0;
+    padding: 8px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: #0b0d0f;
+    border: 1px solid #000;
+    border-radius: 3px;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+  }
+  .certs li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 40px;
+    padding: 0 10px;
+    background: linear-gradient(180deg, #2b3036, #1c2024);
+    border: 1px solid #0a0c0e;
+    border-radius: 2px;
+  }
+  .spine {
+    width: 4px;
+    height: 22px;
+    border-radius: 1px;
+    background: var(--amber);
+    flex: none;
+  }
+  .name {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .name a {
+    color: var(--ink);
+  }
+  .year {
+    font: 11px/1 var(--mono);
+    color: var(--muted);
+  }
+</style>

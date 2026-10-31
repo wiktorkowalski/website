@@ -1,0 +1,85 @@
+---
+import "@fontsource/jetbrains-mono/400.css";
+import "@fontsource/jetbrains-mono/600.css";
+import "@fontsource/jetbrains-mono/700.css";
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/600.css";
+import "../styles/global.css";
+import "../styles/rack.css";
+import PatchPanel from "../components/rack/PatchPanel.astro";
+import { SITE } from "../consts";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const { title, description = SITE.description } = Astro.props;
+const fullTitle = title ? `${title} | ${SITE.title}` : SITE.title;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title ?? SITE.title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="theme-color" content="#0c0e10" />
+  </head>
+  <body>
+    <a class="skip" href="#main">
+      Skip to content
+    </a>
+    <div id="top" class="page">
+      <div class="rack">
+        <div class="cab-top">
+          <span>RACK-01 · WIKTORKOWALSKI.PL</span>
+          <span class="online">
+            <span class="dot" aria-hidden="true"></span>42U · ONLINE
+          </span>
+        </div>
+        <div class="cabinet">
+          <div class="rail" aria-hidden="true"></div>
+          <div class="units">
+            <PatchPanel />
+            <main id="main" class="units-main">
+              <slot />
+            </main>
+          </div>
+          <div class="rail right" aria-hidden="true"></div>
+        </div>
+        <footer class="cab-base">
+          <span>
+            © {new Date().getFullYear()} {SITE.author}
+          </span>
+          <a href="#top">Back to U42 ↑</a>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>
+
+<style>
+  .units-main {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .online {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .online .dot {
+    width: 7px;
+    height: 7px;
+  }
+</style>

@@ -1,75 +1,28 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import HorizontalCard from "../components/HorizontalCard.astro";
-import fetch from "node-fetch";
-import { BlogPost } from "../types";
-
-const url = "https://blog.wiktorkowalski.pl/";
-
-export const getPosts = async (url: string) => {
-  const res = await fetch(url + "posts.json");
-  const posts = await res.json();
-
-  return posts as BlogPost[];
-};
-const posts = (await getPosts(url)).sort(
-  (a, b) => b.pubDate.valueOf() - a.pubDate.valueOf()
-);
+import Base from "../layouts/Base.astro";
+import Kvm from "../components/rack/Kvm.astro";
+import Blank from "../components/rack/Blank.astro";
+import Projects from "../components/rack/Projects.astro";
+import TapeLibrary from "../components/rack/TapeLibrary.astro";
+import Nas from "../components/rack/Nas.astro";
+import Switch from "../components/rack/Switch.astro";
+import Ups from "../components/rack/Ups.astro";
+import Pdu from "../components/rack/Pdu.astro";
 ---
 
-<BaseLayout sideBarActiveItemID="home">
-  <div class="pb-12 mt-5">
-    <div class="text-xl py-1">Hey there 👋</div>
-    <div class="text-5xl font-bold">I'm Wiktor</div>
-    <div class="text-3xl py-3 font-bold">
-      .NET and Node.js Software Engineer
-    </div>
-    <div class="py-2">
-      <text class="text-lg"> 🏗 This page is under construction 🏗</text>
-    </div>
-
-    <div>
-      <div class="text-3xl w-full font-bold mb-2">My last projects {"</>"}</div>
-    </div>
-
-    <HorizontalCard
-      title="WojtusDiscord"
-      img="/post_img.webp"
-      desc="Discord bot for a private server with overcomplicated underlying infrastructure"
-      url="https://github.com/wiktorkowalski/wojtusdiscord"
-      badge="Featured"
-    />
-    <div class="divider my-0"></div>
-    <HorizontalCard
-      title="Personal Website"
-      img="/post_img.webp"
-      desc="Personal website built with Astro and TailwindCSS"
-      url="https://github.com/wiktorkowalski/website"
-    />
-    <div class="divider my-0"></div>
-    <HorizontalCard
-      title="Blog"
-      img="/post_img.webp"
-      desc="Blog built with Astro and TailwindCSS"
-      url="https://github.com/wiktorkowalski/blog"
-    />
-
-    <div>
-      <div class="text-3xl w-full font-bold mb-5 mt-10">Latest from blog</div>
-    </div>
-    <div class="divider my-0"></div>
-    {
-      posts.slice(0, 4).map((post) => (
-        <>
-          <HorizontalCard
-            title={post.title}
-            desc={post.description}
-            url={url + post.link}
-            target="_blank"
-          />
-          <div class="divider my-0" />
-        </>
-      ))
-    }
-  </div>
-</BaseLayout>
+<Base>
+  <Kvm>
+    <p>
+      I build backends in .NET and Node.js and like the part of the job where code meets infrastructure:
+      Terraform, CI pipelines, DNS, and the small tools that keep everything running.
+    </p>
+  </Kvm>
+  <Blank />
+  <Projects />
+  <TapeLibrary />
+  <Nas />
+  <Switch />
+  <Blank />
+  <Ups />
+  <Pdu />
+</Base>

@@ -1,12 +1,16 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
+import Base from "../layouts/Base.astro";
+import Device from "../components/rack/Device.astro";
 ---
 
-<BaseLayout title = "404: Not Found" includeSidebar={false}>
-  <div class="text-center">
-    <h1 class="text-9xl font-bold mb-4">🏝</h1>
-    <h1 class="text-9xl font-bold mb-2">404</h1>
-    <h3 class="text-2xl">The page you're looking for couldn't be found.</h3>
-    <a class="btn btn-accent mt-9" href="/">Home</a>
-  </div>
-</BaseLayout>
+<Base title="404">
+  <Device labelledby="e404" class="e404">
+    <span class="tag-dev">ERR-404</span>
+    <h1 id="e404" class="h-dev">
+      No device in this slot
+    </h1>
+    <p>
+      Nothing is mounted here. <a href="/">Back to the rack</a>.
+    </p>
+  </Device>
+</Base>

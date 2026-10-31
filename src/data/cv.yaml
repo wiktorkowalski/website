@@ -1,0 +1,55 @@
+# Newest first. `to` omitted = ongoing.
+# DRAFT from the old site (2022). Wiktor: update roles after 2022 and the master's degree.
+
+codetain:
+  kind: job
+  role: Node.js Developer
+  company: Codetain
+  location: Zielona Góra, Poland
+  from: 2022-01
+  notes:
+    - Building and maintaining a product for a client from Munich, Germany.
+    - Node.js, TypeScript, Docker, AWS, GitHub Actions, PostgreSQL.
+
+metapack:
+  kind: job
+  role: .NET Software Engineer
+  company: Metapack
+  location: Zielona Góra, Poland
+  from: 2021-02
+  to: 2021-12
+
+metapack-academy:
+  kind: job
+  role: Summer Academy
+  company: Metapack
+  location: Zielona Góra, Poland
+  from: 2020-09
+  to: 2020-09
+
+cinkciarz:
+  kind: job
+  role: Software Engineer Intern
+  company: Cinkciarz.pl
+  location: Zielona Góra, Poland
+  from: 2019-07
+  to: 2019-09
+
+msc:
+  kind: school
+  degree: MSc, Computer Science
+  school: University of Zielona Góra
+  from: "2021"
+
+bsc:
+  kind: school
+  degree: BSc, Computer Science
+  school: University of Zielona Góra
+  from: "2017"
+  to: "2021"
+
+aws-cpe:
+  kind: cert
+  name: AWS Cloud Practitioner Essentials
+  issuer: AWS Training
+  url: /aws_cloud_practitioner_essentials.pdf

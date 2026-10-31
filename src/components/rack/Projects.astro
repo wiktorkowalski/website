@@ -1,0 +1,243 @@
+---
+import { getCollection, render } from "astro:content";
+import Device from "./Device.astro";
+
+const projects = (await getCollection("projects", (p) => !p.data.hidden)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const servers = await Promise.all(
+  projects.map(async (p, i) => ({
+    p,
+    no: `SRV-${String(i + 1).padStart(2, "0")}`,
+    Content: (await render(p)).Content,
+  })),
+);
+const bays = ["", "", "amber", "", "", "off", "", "off"];
+---
+
+<section id="projects" aria-labelledby="projects-h" class="group">
+  <div class="cable">
+    <h2 id="projects-h" class="h-dev">
+      Projects
+    </h2>
+    <span class="tag-dev">{servers.length} SERVERS</span>
+  </div>
+  {servers.map(({ p, no, Content }) => (
+    <Device as="article" labelledby={`srv-${p.id}`} class="srv">
+      <div class="bays full-only" aria-hidden="true">
+        {bays.map((c) => (
+          <span class="bay">
+            <i class:list={["dot", c]} />
+            <i class="handle" />
+          </span>
+        ))}
+      </div>
+      <div class="info">
+        <div class="title">
+          <span class="plate">{no}</span>
+          <h3 id={`srv-${p.id}`}>{p.data.title}</h3>
+        </div>
+        <p class="desc">{p.data.summary}</p>
+        <div class="more">
+          <Content />
+        </div>
+        <ul class="chips">
+          {p.data.stack.map((t) => (
+            <li>{t}</li>
+          ))}
+          {p.data.status !== "active" && <li class="st">{p.data.status}</li>}
+        </ul>
+      </div>
+      <div class="act">
+        <span class="ind" aria-hidden="true">
+          <span>
+            <i class="dot" />
+            PWR
+          </span>
+          <span>
+            <i class="dot" />
+            NET
+          </span>
+          <span>
+            <i class:list={["dot", p.data.status === "active" ? "amber" : "off"]} />
+            ACT
+          </span>
+        </span>
+        <span class="btns">
+          {p.data.url && (
+            <a class="btn" href={p.data.url} aria-label={`Open ${p.data.title}`}>
+              Live
+            </a>
+          )}
+          {p.data.repo && (
+            <a class="btn" href={p.data.repo} aria-label={`Source of ${p.data.title} on GitHub`}>
+              Source
+              <svg
+                aria-hidden="true"
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M7 17L17 7" />
+                <path d="M8 7h9v9" />
+              </svg>
+            </a>
+          )}
+        </span>
+      </div>
+    </Device>
+  ))}
+</section>
+
+<style>
+  .group {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    scroll-margin-top: 1rem;
+  }
+  .cable {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 var(--ear-w);
+    border: 1px solid #0a0c0e;
+    border-radius: 3px;
+    background-image: repeating-linear-gradient(90deg, #0d0f11 0 2px, #181b1f 2px 4px);
+  }
+  .cable > * {
+    padding: 4px 10px;
+    background: #121518;
+  }
+  :global(.body.srv) {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px 20px;
+  }
+  .bays {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 3px;
+    width: 156px;
+    flex: none;
+  }
+  .bay {
+    height: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 4px;
+    box-sizing: border-box;
+    background: linear-gradient(180deg, #23272c, #15181b);
+    border: 1px solid #0a0c0e;
+    border-radius: 2px;
+  }
+  .bay .dot {
+    width: 5px;
+    height: 5px;
+  }
+  .handle {
+    height: 3px;
+    background: #3a4047;
+    border-radius: 1px;
+  }
+  .info {
+    flex: 999 1 300px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .plate {
+    font: 700 11px/1.4 var(--mono);
+    letter-spacing: 0.08em;
+    color: #0c0e10;
+    background: #d5dade;
+    padding: 2px 6px;
+    border-radius: 2px;
+  }
+  h3 {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .desc {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--soft);
+  }
+  .more {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+  .more :global(p) {
+    margin: 0;
+  }
+  .more :global(code) {
+    font: 0.9em var(--mono);
+  }
+  .chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .chips li {
+    font: 12px/1.5 var(--mono);
+    color: var(--soft);
+    border: 1px solid #4a525a;
+    padding: 2px 7px;
+    border-radius: 2px;
+  }
+  .chips .st {
+    color: var(--amber);
+    border-color: #8a5d14;
+  }
+  .act {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex: none;
+  }
+  .btns {
+    display: flex;
+    gap: 6px;
+  }
+  .btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 14px;
+    background: linear-gradient(180deg, #474e56, #30353b);
+    border: 1px solid #0a0c0e;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    color: var(--ink);
+    text-decoration: none;
+    font: 600 12px/1 var(--mono);
+  }
+  .btn:hover {
+    background: linear-gradient(180deg, #535b64, #383e45);
+    color: var(--ink);
+  }
+</style>

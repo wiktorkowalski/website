@@ -1,0 +1,146 @@
+---
+import Device from "./Device.astro";
+import { SITE } from "../../consts";
+import { getPosts } from "../../lib/posts";
+
+const posts = await getPosts(3);
+const fmt = (d: Date) => d.toISOString().slice(0, 10);
+---
+
+<Device id="blog" labelledby="blog-h" class="nas">
+  <div class="head">
+    <div class="t">
+      <h2 id="blog-h" class="h-dev">
+        Latest posts
+      </h2>
+      <span class="tag-dev">NAS-01</span>
+    </div>
+    <a href={SITE.blog} class="all">
+      All posts on the blog
+      <svg
+        aria-hidden="true"
+        width="13"
+        height="13"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.4"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M7 17L17 7" />
+        <path d="M8 7h9v9" />
+      </svg>
+    </a>
+  </div>
+  {posts.length > 0 && (
+    <ul class="disks">
+      {posts.map((post, i) => (
+        <li>
+          <a href={post.url} class="disk">
+            <span class="leds" aria-hidden="true">
+              <i class="dot" />
+              <i class:list={["dot", i === 0 ? "amber" : "off"]} />
+            </span>
+            <span class="txt">
+              <span class="meta">
+                DISK-{String(i).padStart(2, "0")} ·{" "}
+                <time datetime={post.date.toISOString()}>{fmt(post.date)}</time>
+              </span>
+              <span class="title">{post.title}</span>
+              {post.description && <span class="desc">{post.description}</span>}
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )}
+</Device>
+
+<style>
+  :global(.body.nas) {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .t {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .all {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    font: 13px/1 var(--mono);
+  }
+  .disks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .disks li {
+    flex: 1 1 260px;
+    min-width: 0;
+    display: flex;
+  }
+  .disk {
+    flex: 1;
+    display: flex;
+    gap: 12px;
+    padding: 12px 14px;
+    background-color: #121518;
+    background-image: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 4px);
+    border: 1px solid #000;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    text-decoration: none;
+  }
+  .disk:hover {
+    border-color: #4a525a;
+  }
+  .disk:hover .title {
+    text-decoration: underline;
+  }
+  .leds {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 4px;
+  }
+  .txt {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .meta {
+    font: 600 11px/1.3 var(--mono);
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+  .title {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--ink);
+  }
+  .desc {
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+</style>
