@@ -1,0 +1,84 @@
+---
+import Device from "./Device.astro";
+import { SOCIALS } from "../../consts";
+---
+
+<Device labelledby="pdu-h" oneU dark class="pdu">
+  <div class="t">
+    <h2 id="pdu-h" class="h-dev">
+      Elsewhere
+    </h2>
+    <span class="tag-dev">PDU-01</span>
+  </div>
+  <ul>
+    {SOCIALS.map((s) => (
+      <li>
+        <a href={s.href}>
+          <span class="outlet" aria-hidden="true">
+            <i />
+            <i />
+            <i />
+          </span>
+          <i class="dot" aria-hidden="true" />
+          {s.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</Device>
+
+<style>
+  :global(.body.pdu) {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    padding: 6px 4px;
+  }
+  .t {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  ul {
+    flex: 1 1 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 0 10px 0 4px;
+    text-decoration: none;
+    color: var(--text);
+    font: 13px/1 var(--mono);
+  }
+  a:hover {
+    color: var(--link);
+  }
+  .outlet {
+    width: 36px;
+    height: 30px;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    background: #050607;
+    border: 2px solid #3a4047;
+    border-radius: 6px 6px 3px 3px;
+    box-sizing: border-box;
+  }
+  .outlet i {
+    width: 3px;
+    height: 9px;
+    background: #23272c;
+    border-radius: 1px;
+  }
+</style>

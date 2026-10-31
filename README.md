@@ -13,13 +13,13 @@ npm run build
 
 ## Content
 
-| What           | Where                                                                                                 | Rack device         |
-| -------------- | ----------------------------------------------------------------------------------------------------- | ------------------- |
-| Projects       | `src/content/projects/<slug>.md` (one file = one 2U server, `order` sorts, `hidden: true` unmounts) | SRV-xx              |
-| CV             | `src/data/cv.yaml` (`kind: job / school / cert`)                                                      | LOG-01              |
-| Stack          | `src/data/stack.yaml`                                                                                 | SW-01               |
-| About, contact | `src/pages/index.astro`                                                                               | KVM-01, UPS-01      |
-| Socials, nav   | `src/consts.ts`                                                                                       | PDU-01, patch panel |
+| What         | Where                                                                                               | Rack device         |
+| ------------ | --------------------------------------------------------------------------------------------------- | ------------------- |
+| Projects     | `src/content/projects/<slug>.md` (one file = one 2U server, `order` sorts, `hidden: true` unmounts) | SRV-xx              |
+| CV           | `src/data/cv.yaml` (`kind: job / school / cert`)                                                    | LOG-01              |
+| Stack        | `src/data/stack.yaml` (one key = one switch, ports in order)                                        | SW-01               |
+| About        | `src/pages/index.astro`                                                                             | KVM-01              |
+| Socials, nav | `src/consts.ts`                                                                                     | PDU-01, patch panel |
 
 Latest posts (NAS-01) come from `https://blog.wiktorkowalski.pl/posts.json` at build time. Set `BLOG_URL` to read
 another blog (e.g. a local `npm run dev` of the blog). If the fetch fails the build still passes, the NAS just
